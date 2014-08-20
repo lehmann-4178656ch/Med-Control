@@ -52,3 +52,9 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# local files provided as examples
+camera.csv
+radio.csv
+config.ini
+med_control.sh
+venv3/
