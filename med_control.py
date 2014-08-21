@@ -15,7 +15,7 @@ config.read(os.path.join(BASE_DIR, 'config.ini'))
 
 # Add template path to bottle search path
 bottle.TEMPLATE_PATH.append(config['Interface'].get('views',
-    os.path.join(BASE_DIR, 'views')))
+                            os.path.join(BASE_DIR, 'views')))
 
 
 class AudioMixer(object):
@@ -29,14 +29,20 @@ class AudioMixer(object):
         id = config['Sound'].get('SINK_ID', '')
         if len(id):
             key = key + ' ' + id
-        output = subprocess.check_output(['pacmd', 'dump'])
-        data = filter(lambda l: l.startswith(key),
-                      output.decode(encoding).split('\n'))
-        return data
+        try:
+            output = subprocess.check_output(['pacmd', 'dump'])
+            data = filter(lambda l: l.startswith(key),
+                          output.decode(encoding).split('\n'))
+            return data
+        except:
+            return None
 
     def get_volume(self):
-        data = next(self._filter_pacmd_dump('set-sink-volume'))
-        return int(int(data.split()[-1], 16)/65535. * 100)
+        output = self._filter_pacmd_dump('set-sink-volume')
+        if output is not None:
+            data = next(output)
+            return int(int(data.split()[-1], 16)/65535. * 100)
+        return -1
 
     def set_volume(self, volume):
         volume = max(min(volume, 100), 0)
@@ -45,8 +51,11 @@ class AudioMixer(object):
     volume = property(get_volume, set_volume)
 
     def get_mute(self):
-        data = next(self._filter_pacmd_dump('set-sink-mute'))
-        return data.split()[-1] == 'yes'
+        output = self._filter_pacmd_dump('set-sink-mute')
+        if output is not None:
+            data = next(output)
+            return 1 and data.split()[-1] == 'yes' or 0
+        return -1
 
     def set_mute(self, mute):
         mute = 1 and mute or 0
@@ -58,7 +67,7 @@ class AudioMixer(object):
 class MediaObject(object):
     def __init__(self, key, name, cmd):
         self.name = name
-        self.cmd = config[key].get('cmd').format(cmd=cmd,pid='{pid}')
+        self.cmd = config[key].get('cmd').format(cmd=cmd, pid='{pid}')
 
 
 class PidControl(object):
@@ -143,8 +152,8 @@ def radio_action(index):
 @bottle.route('/camera')
 def camera_index():
     return bottle.template('camera', actions=get_media_commands('Camera'),
-                            system_status=get_system_status(),
-                            host=config['Camera'].get('host'))
+                           system_status=get_system_status(),
+                           host=config['Camera'].get('host'))
 
 
 @bottle.route('/camera/<index>')
@@ -160,4 +169,3 @@ def index():
 
 bottle.run(host=config['Interface'].get('host', '127.0.0.1'),
            port=config['Interface'].getint('port'))
-
