@@ -1,5 +1,5 @@
 			<footer class="footer">
-&copy; <a href="https://https://github.com/lehmann-4178656ch/">A. Lehmann</a>
+&copy; <a href="https://github.com/lehmann-4178656ch/Med-Control">A. Lehmann</a>
 			</footer>
 		</div>
 	</body>
