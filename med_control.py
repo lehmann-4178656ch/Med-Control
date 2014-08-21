@@ -54,7 +54,7 @@ class AudioMixer(object):
         output = self._filter_pacmd_dump('set-sink-mute')
         if output is not None:
             data = next(output)
-            return 1 and data.split()[-1] == 'yes' or 0
+            return data.split()[-1] == 'yes' and 1 or 0
         return -1
 
     def set_mute(self, mute):
