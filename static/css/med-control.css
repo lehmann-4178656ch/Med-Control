@@ -57,3 +57,10 @@ body {
   }
 }
 
+.container ul {
+  list-style-type: none;
+}
+
+.container ul  a.btn{
+  margin-bottom: 1em;
+}
