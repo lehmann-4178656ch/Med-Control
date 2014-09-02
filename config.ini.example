@@ -8,6 +8,7 @@ cmd: cvlc --daemon --pidfile {pid} {cmd} :v4l2-standard= :live-caching=300 :sout
 host: 127.0.0.1
 port: 8080
 views: /tmp/med-interface/views
+pids: /var/run/med-interface
 
 [Radio]
 cmd: cvlc --daemon --pidfile {pid} {cmd}

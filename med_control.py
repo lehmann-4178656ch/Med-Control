@@ -72,7 +72,7 @@ class MediaObject(object):
 
 class PidControl(object):
     def __init__(self, group, name, icon, cmd=None):
-        self.pid = '/tmp/%s.pid' % group
+        self.pid = config['Interface'].get('pids', '/tmp')+'/%s.pid' % group
         self.name = name
         self.icon = icon
         self.cmd = cmd
