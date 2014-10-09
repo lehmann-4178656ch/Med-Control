@@ -4,6 +4,10 @@ port: 8081
 host: 127.0.0.1:%(port)s
 cmd: cvlc --daemon --pidfile {pid} {cmd} :v4l2-standard= :live-caching=300 :sout=#transcode{{{{vcodec=theo}}}}:http{{{{dst=:%(port)s/stream.ogg}}}}
 
+[Color]
+cmd: /tmp/med-interface/background.sh {color}
+colors: ff0000 00ff00 0000ff
+
 [Interface]
 host: 127.0.0.1
 port: 8080
