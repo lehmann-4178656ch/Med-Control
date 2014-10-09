@@ -64,6 +64,17 @@ class AudioMixer(object):
     mute = property(get_mute, set_mute)
 
 
+class BackgroundChanger(object):
+    def __init__(self, cmd, name):
+        self.name = name
+        self.cmd = cmd.format(color=name)
+
+    def run(self):
+        if self.cmd is not None:
+            subprocess.call(shlex.split(self.cmd))
+
+
+
 class MediaObject(object):
     def __init__(self, key, name, cmd):
         self.name = name
@@ -78,7 +89,6 @@ class PidControl(object):
         self.cmd = cmd
         if self.cmd:
             self.cmd = cmd.format(pid=self.pid)
-        print('A:'+str(self.cmd))
 
     def kill(self):
         if os.path.exists(self.pid):
@@ -91,8 +101,17 @@ class PidControl(object):
     def run(self):
         self.kill()
         if self.cmd is not None:
-            print('B:'+self.cmd)
             subprocess.call(shlex.split(self.cmd))
+
+
+def get_background_commands():
+    commands = [
+        BackgroundChanger(config['Color'].get('cmd'), '000000'),
+        BackgroundChanger(config['Color'].get('cmd'), 'ffffff'),
+    ]
+    for color in config['Color'].get('colors').split():
+        commands.append(BackgroundChanger(config['Color'].get('cmd'), color))
+    return commands
 
 
 def get_media_objects(key):
@@ -161,6 +180,20 @@ def camera_action(index):
     index = int(index)
     get_media_commands('Camera')[index].run()
     bottle.redirect('/camera')
+
+
+@bottle.route('/background')
+def background_index():
+    return bottle.template('background', actions=get_background_commands(),
+                           system_status=get_system_status(),
+                           host=config['Camera'].get('host'))
+
+
+@bottle.route('/background/<index>')
+def background_action(index):
+    index = int(index)
+    get_background_commands()[index].run()
+    bottle.redirect('/background')
 
 
 @bottle.route('/')

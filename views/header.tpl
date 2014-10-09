@@ -12,9 +12,9 @@
 		<div class="container">
 			<header class="header">
 				<ul class="nav nav-pills pull-right">
-					<li><a href="/radio"><span class="glyphicon glyphicon-music"></span> Radio <span class="glyphicon glyphicon-{{ 'play' if system_status[0] else 'stop' }}"></span> <span class="glyphicon glyphicon-volume-{{ 'off' if system_status[3] else 'up' }}"></span>
-					</a></li>
+					<li><a href="/radio"><span class="glyphicon glyphicon-music"></span> Radio <span class="glyphicon glyphicon-{{ 'play' if system_status[0] else 'stop' }}"></span> <span class="glyphicon glyphicon-volume-{{ 'off' if system_status[3] else 'up' }}"></span></a></li>
 					<li><a href="/camera"><span class="glyphicon glyphicon-facetime-video"></span> Kamera <span class="glyphicon glyphicon-eye-{{ 'open' if system_status[1] else 'close' }}"></a></li>
+					<li><a href="/background"><span class="glyphicon glyphicon-picture"></span> Hintergrund</a></li>
 				</ul>
 				<h3 class="text-muted"><a href="/">Med-Control</a></h3>
 			</header>
