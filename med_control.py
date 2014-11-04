@@ -196,6 +196,25 @@ def background_action(index):
     bottle.redirect('/background')
 
 
+@bottle.route('/background/color', method='GET')
+def background_color_index():
+    bottle.redirect('/background')
+
+
+@bottle.route('/background/color', method='POST')
+def background_color_form():
+    color = bottle.request.POST.get('color','').strip()
+    if len(color):
+        BackgroundChanger(config['Color'].get('cmd'), color).run()
+    bottle.redirect('/background')
+
+
+@bottle.route('/background/color/<color>')
+def background_color(color):
+    BackgroundChanger(config['Color'].get('cmd'), color).run()
+    bottle.redirect('/background')
+
+
 @bottle.route('/')
 def index():
     return bottle.template('index', system_status=get_system_status())
