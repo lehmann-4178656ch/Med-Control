@@ -8,6 +8,10 @@
 		</ul>
 	</div>
 	<div class="col-xs-12 col-sm-6">
+                <div class="row">
+		    <div class="col-xs-9" style="border: 5px solid #E5E5E5; background-color: {{ current }};">&nbsp;</div>
+                    <div class="col-xs-3"><p>{{ current }}</p></div>
+                </div>
 		<form role="form" method="post" action="/background/color">
 			<div class="form-group">
 				<label for="color">Hex-RGB-Farbe</label>

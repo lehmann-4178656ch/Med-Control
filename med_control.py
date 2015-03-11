@@ -71,7 +71,14 @@ class BackgroundChanger(object):
 
     def run(self):
         if self.cmd is not None:
-            subprocess.call(shlex.split(self.cmd))
+            if self.name is '':
+                color = subprocess.check_output(shlex.split(self.cmd),
+                                                universal_newlines=True)
+                color = color.strip()[1:-1]
+                print("Have: %s" % color)
+                return color
+            else:
+                subprocess.call(shlex.split(self.cmd))
 
 
 
@@ -112,6 +119,10 @@ def get_background_commands():
     for color in config['Color'].get('colors').split():
         commands.append(BackgroundChanger(config['Color'].get('cmd'), color))
     return commands
+
+def get_background_color():
+    return BackgroundChanger(config['Color'].get('cmd'), '')
+    
 
 
 def get_media_objects(key):
@@ -186,7 +197,8 @@ def camera_action(index):
 def background_index():
     return bottle.template('background', actions=get_background_commands(),
                            system_status=get_system_status(),
-                           host=config['Camera'].get('host'))
+                           host=config['Camera'].get('host'),
+                           current=get_background_color().run())
 
 
 @bottle.route('/background/<index>')
